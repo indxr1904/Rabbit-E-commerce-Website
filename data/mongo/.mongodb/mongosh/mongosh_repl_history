@@ -1,6 +1,0 @@
-db.products.find().pretty()
-show collections
-use rabbitdb
-show dbs
-db.products.find().pretty()
-use rabbitdb

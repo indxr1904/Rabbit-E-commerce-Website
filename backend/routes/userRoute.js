@@ -7,12 +7,9 @@ const router = express.Router();
 
 // Utility function to create JWT
 const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "40h" });
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "5s" });
 };
 
-// =============================
-// REGISTER API
-// =============================
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -23,7 +20,7 @@ router.post("/register", async (req, res) => {
     user = new User({ name, email, password });
     await user.save();
 
-    // ✅ Generate JWT (simplified structure)
+    // Generate JWT (simplified structure)
     const token = generateToken(user._id, user.role);
 
     res.status(201).json({
@@ -41,9 +38,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// =============================
-// LOGIN API
-// =============================
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -57,7 +51,7 @@ router.post("/login", async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid Credentials" });
 
-    // ✅ Generate JWT (same simplified structure)
+    //Generate JWT (same simplified structure)
     const token = generateToken(user._id, user.role);
 
     res.json({
@@ -75,9 +69,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// =============================
-// GET USER PROFILE (Protected)
-// =============================
 router.get("/profile", protect, async (req, res) => {
   res.json(req.user);
 });

@@ -1,5 +1,9 @@
+import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserLayout from "./components/Layout/UserLayout";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { logout } from "./redux/slices/authSlice";
 import Home from "./pages/Home";
 import { Toaster } from "sonner";
 import Login from "./pages/Login";
@@ -17,12 +21,23 @@ import UserManagement from "./components/Admin/UserManagement";
 import ProductManagement from "./components/Admin/ProductManagement";
 import EditProductPage from "./components/Admin/EditProductPage";
 import OrderManagement from "./components/Admin/OrderManagement";
-
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import ProtectedRoute from "./components/Common/ProtectedRoute";
 
 const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      const parsed = JSON.parse(userInfo);
+      const decoded = jwtDecode(parsed.token);
+      const now = Math.floor(Date.now() / 1000);
+      if (decoded.exp < now) {
+        dispatch(logout());
+      }
+    }
+  }, [dispatch]);
   return (
     <Provider store={store}>
       <BrowserRouter>

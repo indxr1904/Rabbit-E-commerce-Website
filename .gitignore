@@ -14,3 +14,10 @@ backend/dist/
 # System files
 .DS_Store
 Thumbs.db
+
+data/
+logs/
+
+echo "data/mongo/" >> .gitignore
+echo "node_modules/" >> .gitignore
+echo ".env" >> .gitignore

@@ -7,18 +7,18 @@ import { clearCart } from "../redux/slices/cartSlice";
 import { fetchUserOrders } from "../redux/slices/orderSlice";
 
 const Profile = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !token) {
       navigate("/login");
     } else {
       console.log("User Info from Redux:", user);
       dispatch(fetchUserOrders());
     }
-  }, [user, navigate, dispatch]);
+  }, [user, token, navigate, dispatch]);
 
   const handleLogout = () => {
     dispatch(logout());

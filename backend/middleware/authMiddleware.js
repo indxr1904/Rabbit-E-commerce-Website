@@ -12,10 +12,9 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
 
-      // Decode token
+      // Verify the token (this throws if invalid OR expired)
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // ✅ Use decoded.id (since token payload is now { id, role })
       req.user = await User.findById(decoded.id).select("-password");
 
       if (!req.user) {
@@ -25,10 +24,18 @@ const protect = async (req, res, next) => {
       next();
     } catch (error) {
       console.error("Token Verification Failed:", error.message);
-      res.status(401).json({ message: "Not authorized, token failed" });
+
+      // Handle token expiry specifically
+      if (error.name === "TokenExpiredError") {
+        return res.status(401).json({ message: "Token expired" });
+      }
+
+      return res.status(401).json({ message: "Not authorized, token invalid" });
     }
   } else {
-    res.status(401).json({ message: "Not authorized, no token provided" });
+    return res
+      .status(401)
+      .json({ message: "Not authorized, no token provided" });
   }
 };
 

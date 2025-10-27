@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// ✅ Load stored user + token if available
+// Load stored user + token if available
 const storedUserInfo = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
@@ -18,7 +18,7 @@ const initialState = {
   error: null,
 };
 
-// 🟢 LOGIN USER
+// LOGIN USER
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (userData, { rejectWithValue }) => {
@@ -44,7 +44,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// 🟢 REGISTER USER
+// REGISTER USER
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData, { rejectWithValue }) => {
@@ -70,7 +70,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// 🧩 AUTH SLICE
+// AUTH SLICE
 const authSlice = createSlice({
   name: "auth",
   initialState,
