@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Utility function to create JWT
 const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "5s" });
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "40h" });
 };
 
 router.post("/register", async (req, res) => {

@@ -12,6 +12,18 @@ const saveCartToStorage = (cart) => {
   localStorage.setItem("cart", JSON.stringify(cart));
 };
 
+const getAuthHeaders = () => {
+  const userInfo = localStorage.getItem("userInfo");
+  if (!userInfo) return {};
+
+  const parsed = JSON.parse(userInfo);
+  const token = parsed?.token;
+
+  return token
+    ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+    : {};
+};
+
 // Fetch cart for a user or guest
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
@@ -122,9 +134,7 @@ export const mergeCart = createAsyncThunk(
           user,
         },
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
+          headers: getAuthHeaders(),
         }
       );
       return response.data;

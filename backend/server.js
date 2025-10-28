@@ -15,7 +15,12 @@ const orderAdminRoutes = require("./routes/adminOrderRoutes");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://rabbit-e-commerce-website-hfjj.vercel.app"],
+    credentials: true,
+  })
+);
 
 dotenv.config();
 
