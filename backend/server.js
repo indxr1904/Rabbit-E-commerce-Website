@@ -21,8 +21,27 @@ dotenv.config();
 
 connectDB();
 
-// Handle preflight requests (important)
-app.options("*", cors());
+const allowedOrigins = [
+  "https://rabbit-e-commerce-website-xwwe.vercel.app", // frontend domain
+  "http://localhost:3000",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
 
 const PORT = process.env.PORT || 3000;
 
